@@ -2,7 +2,7 @@
 // Text uses a tiny markdown subset: blank line = new paragraph, "- " = bullet, `code`, **bold**.
 
 window.SITE = {
-  owner: "Your Name",                       // shown in the header and page title
+  owner: "Anand Mohan",                      // shown in the header and page title
   role: "Technical Architect · Java & distributed systems",
   intro: "How I choose technology and why. A personal technology radar and the architecture decisions behind it.",
   links: [
