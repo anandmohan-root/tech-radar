@@ -11,7 +11,7 @@ window.SITE = {
   ],
   updated: "November 2026",
   // Shows a "draft" banner on every page. Set to false once you've reviewed the content.
-  draftNotice: true,
+  draftNotice: false,
 };
 
 window.RADAR = {
