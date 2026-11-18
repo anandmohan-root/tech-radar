@@ -144,6 +144,15 @@
     document.getElementById("radar-card").appendChild(buildSvg());
   }
 
+  function detailNotes(name) {
+    var d = (window.DETAILS || {})[name];
+    if (!d) return "";
+    function list(items) { return "<ul>" + items.map(function (t) { return "<li>" + inline(t) + "</li>"; }).join("") + "</ul>"; }
+    return '<div class="notes"><h4>Case study</h4><p>' + inline(d.case) + "</p>" +
+      '<div class="proscons"><div><h4>Pros</h4>' + list(d.pros) + "</div><div><h4>Cons</h4>" + list(d.cons) + "</div></div>" +
+      "<h4>When to use it</h4><p>" + inline(d.fit) + "</p></div>";
+  }
+
   function select(id) {
     var e = entries[id - 1];
     if (!e) return;
@@ -151,6 +160,7 @@
     document.getElementById("detail").innerHTML =
       '<div class="meta" style="color:' + qColor(e.q) + '">' + esc(radar.quadrants[e.q]) + " · " + esc(radar.rings[e.r].name) + "</div>" +
       "<h3>" + e.id + ". " + esc(e.name) + "</h3><p>" + inline(e.text) + "</p>" +
+      detailNotes(e.name) +
       (adr ? '<p style="margin-top:8px"><a href="#/decisions/' + adr.id + '">Read the decision: ' + esc(adr.title) + " →</a></p>" : "");
     document.querySelectorAll("[data-id]").forEach(function (el) {
       el.classList.toggle("is-active", el.getAttribute("data-id") === String(id));

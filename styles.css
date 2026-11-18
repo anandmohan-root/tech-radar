@@ -112,6 +112,11 @@ h2 { font-size: 1.15rem; margin: 0 0 8px; }
 .detail h3 { margin: 2px 0 4px; font-size: 1.05rem; }
 .detail p { margin: 0; }
 .detail .hint { color: var(--muted); }
+.detail .notes { margin-top: 10px; border-top: 1px solid var(--line); padding-top: 4px; }
+.detail .notes h4 { margin: 10px 0 4px; font-size: .8rem; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); }
+.detail .notes ul { margin: 0; padding-left: 1.2em; }
+.detail .proscons { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 16px; }
+@media (min-width: 600px) { .detail .proscons { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .legend { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
 @media (min-width: 600px) { .legend { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
