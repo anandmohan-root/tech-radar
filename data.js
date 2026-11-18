@@ -79,7 +79,7 @@ window.RADAR = {
     { q: 3, r: 0, name: "Keycloak (OIDC / JWT)", text: "Self-hosted sign-in with OpenID Connect and PKCE for the browser; each service checks the JWT itself as a resource server and maps realm roles to access rules." },
     { q: 3, r: 0, name: "Docker Compose", text: "One command starts the whole sample locally: services, database, Kafka, Redis, Keycloak and gateway. Not a production runtime." },
     { q: 3, r: 0, name: "GitHub Actions", text: "Builds and tests every push, including the Testcontainers and browser tests." },
-    { q: 3, r: 1, name: "Kong Gateway", text: "Single entry point with routing, rate limits and request-size limits. Each service still validates tokens itself." },
+    { q: 3, r: 0, name: "Kong Gateway", text: "Single entry point with routing, rate limits and request-size limits. Each service still validates tokens itself." },
     { q: 3, r: 1, name: "Grafana LGTM (OTel)", text: "All-in-one Grafana, Loki, Tempo and Mimir container that receives OpenTelemetry data. Good for a laptop; run the parts separately in production." },
     { q: 3, r: 1, name: "Playwright", text: "Browser tests for real user journeys (buy, pay, cancel; admin restock), run in Microsoft's container so no browser install is needed." },
     { q: 3, r: 1, name: "Mailpit", text: "Catches every email in development and tests so nothing reaches real addresses." },
