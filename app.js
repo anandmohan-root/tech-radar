@@ -147,10 +147,12 @@
   function detailNotes(name) {
     var d = (window.DETAILS || {})[name];
     if (!d) return "";
+    var it = (window.INTEGRATION || {})[name];
     function list(items) { return "<ul>" + items.map(function (t) { return "<li>" + inline(t) + "</li>"; }).join("") + "</ul>"; }
     return '<div class="notes"><h4>Case study</h4><p>' + inline(d.case) + "</p>" +
       '<div class="proscons"><div><h4>Pros</h4>' + list(d.pros) + "</div><div><h4>Cons</h4>" + list(d.cons) + "</div></div>" +
-      "<h4>When to use it</h4><p>" + inline(d.fit) + "</p></div>";
+      "<h4>When to use it</h4><p>" + inline(d.fit) + "</p>" +
+      (it ? '<h4>How it integrates <span class="kind kind-' + esc(it.kind) + '">' + esc(it.kind) + "</span></h4><p>" + inline(it.text) + "</p>" : "") + "</div>";
   }
 
   function select(id) {

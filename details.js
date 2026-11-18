@@ -267,3 +267,53 @@ window.DETAILS = {
     fit: "Avoid as a default. Earn each service boundary, and begin with a modular monolith."
   }
 };
+
+// How each tool is introduced into a real system.
+// kind: "Code" = change application code; "Config" = change configuration or platform above the app (cross-cutting);
+//       "Both" = a bit of each; "Practice" = a way of working, not a product to install.
+window.INTEGRATION = {
+  "React + Vite": { kind: "Both", text: "New front-end project, so no change to existing services. Above the app: route it through the gateway or nginx on the same origin and set a Content-Security-Policy there." },
+  "Spring Modulith": { kind: "Code", text: "Code change: arrange packages as modules, publish events between them, and add the verification test. Nothing in infrastructure changes." },
+  "GraalVM native image": { kind: "Both", text: "Mostly build configuration (native build plugin, a native-friendly base image). Code changes only where reflection or dynamic loading needs hints." },
+  "Quarkus": { kind: "Code", text: "Not a drop-in: the framework is replaced, so services are rewritten or built new. Plan it per service, not as a configuration switch." },
+  "PostgreSQL": { kind: "Both", text: "Config: driver, datasource URL and pool settings. Code only where you use database-specific features such as JSONB or row locking." },
+  "Flyway": { kind: "Config", text: "Add the dependency and SQL files under the migrations folder; no Java code. It runs on start-up, so every service gets the same behaviour." },
+  "Caffeine": { kind: "Both", text: "Cross-cutting by annotation: put @Cacheable and @CacheEvict on service methods (code) and set size and expiry in cache configuration. The call sites barely change." },
+  "Redis / Valkey": { kind: "Both", text: "Config for connection and, if you use Spring's cache abstraction, switching the cache store with no code change. Code only for direct use such as carts or rate limits." },
+  "Two-level cache": { kind: "Both", text: "Keep the same @Cacheable annotations; the change is one shared cache-manager setup and a pub/sub invalidation listener, so it can live in a common library." },
+  "jOOQ": { kind: "Code", text: "A new query layer in the code, plus a code-generation step in the build. Introduce it per query or repository, next to existing JPA code." },
+  "Debezium CDC": { kind: "Config", text: "Deploy a connector in Kafka Connect and enable the database change log. The source application is not changed; only the consumers of the events need code." },
+  "Shared database across services": { kind: "Both", text: "Moving away from it: replace cross-table reads with API or event calls (code), then remove the other services' database permissions (platform configuration)." },
+  "Open Session in View": { kind: "Config", text: "One property turns it off (spring.jpa.open-in-view=false). Then fix the lazy-loading errors it reveals in code, usually by returning DTOs." },
+  "Apache Kafka": { kind: "Both", text: "Config: brokers, topics, serialisers, security. Code: producers and listeners where services publish or consume events." },
+  "Transactional outbox": { kind: "Code", text: "Code and schema change: an outbox table, writing events in the same transaction as the data, and a relay. Best placed in a shared library so every service does it the same way." },
+  "Idempotent consumers": { kind: "Code", text: "Code and schema change in each handler: a dedupe key or unique constraint, so a repeated message does nothing." },
+  "Resilience4j": { kind: "Both", text: "Cross-cutting by annotation or by wrapping the HTTP client (@CircuitBreaker, @Retry, timeouts), with thresholds kept in YAML. One shared client configuration covers many calls." },
+  "Saga choreography": { kind: "Code", text: "Code change in every service involved: publish events and handle the others' events, including compensation. No central component to add." },
+  "Dead-letter topics": { kind: "Config", text: "Mostly shared configuration: one error-handler bean per Kafka service sends failed messages to a -dlt topic. Add monitoring and a replay procedure around it." },
+  "Server-sent events": { kind: "Both", text: "Code: an endpoint that streams events and a client that reads them. Config: raise or manage gateway and proxy timeouts, and disable response buffering." },
+  "RabbitMQ": { kind: "Both", text: "Config for broker, queues and exchanges; code for the producers and listeners. Similar shape to Kafka integration." },
+  "Saga orchestration": { kind: "Code", text: "Code change: a new orchestrator (a service or a workflow engine) plus a command and reply handler in each participant." },
+  "gRPC (internal)": { kind: "Both", text: "Code: shared proto contracts and generated clients and servers. Config: HTTP/2 support in load balancers and gateways." },
+  "Kafka Streams": { kind: "Code", text: "Code change: the processing topology lives in a service. Config covers application id, state-store storage and topic setup." },
+  "AsyncAPI": { kind: "Practice", text: "No runtime change. Keep the document next to the code, publish it, and check for breaking changes in CI." },
+  "Distributed transactions (2PC/XA)": { kind: "Config", text: "Only a transaction-manager configuration, which is why it is tempting. Replace it with the outbox and sagas (code change) rather than adopting it." },
+  "Architecture Decision Records": { kind: "Practice", text: "A folder of short files in the repository and a rule that significant decisions get one, ideally reviewed in the pull request." },
+  "C4 model": { kind: "Practice", text: "Diagrams kept in the repository or wiki and updated with significant changes. No effect on running code." },
+  "OpenTelemetry": { kind: "Config", text: "Cross-cutting with no code change: attach the Java agent at start-up and set its environment variables. Add custom spans in code only for important business steps." },
+  "Testcontainers": { kind: "Code", text: "Test code and build configuration only; production code is untouched. Needs Docker available where tests run." },
+  "Modular monolith first": { kind: "Code", text: "A structure for the code: clear modules and rules about who may call whom. Enforce it with tests." },
+  "Hexagonal architecture": { kind: "Code", text: "Code layout: separate the domain and ports from adapters. Introduce it in new services or one slice at a time when refactoring." },
+  "Keycloak (OIDC / JWT)": { kind: "Both", text: "Above the app: realm, clients and roles in Keycloak. In each service: resource-server settings and role rules, best provided once by a shared security library." },
+  "Docker Compose": { kind: "Config", text: "Dockerfiles and a compose file only. Services read their settings from environment variables, so no code change is needed." },
+  "GitHub Actions": { kind: "Config", text: "A workflow file in the repository. No application code change; keep secrets in the repository settings." },
+  "Kong Gateway": { kind: "Config", text: "Cross-cutting at the edge with no service code change: routes, rate limits and size limits in a declarative file. Services should still check tokens and handle forwarded headers." },
+  "Grafana LGTM (OTel)": { kind: "Config", text: "Point the OpenTelemetry exporter endpoint at the container through environment variables. No code change." },
+  "Playwright": { kind: "Code", text: "A separate test project. Production code changes only if you add stable test hooks to the UI." },
+  "Mailpit": { kind: "Config", text: "In the development or test profile, set the SMTP host and port to Mailpit. No code change." },
+  "ArchUnit": { kind: "Code", text: "A few test classes with rules. Production code is unchanged, though existing violations must be fixed or listed as exceptions." },
+  "Contract testing": { kind: "Code", text: "Test code on both sides of each API or event, plus a place to share contracts and a CI step to verify them." },
+  "Structurizr": { kind: "Practice", text: "A model file in the repository and a build step that renders diagrams. No runtime change." },
+  "Service mesh": { kind: "Config", text: "Cross-cutting at the platform: sidecar injection and policy files, no code change. Remove duplicate retries and timeouts in code so the layers do not fight." },
+  "Microservices by default": { kind: "Practice", text: "An architecture choice rather than a tool. It shapes code, deployment and ownership everywhere, so decide it deliberately." }
+};
